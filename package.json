@@ -1,15 +1,18 @@
 {
   "name": "playwright-demo-example",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {},
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "description": "",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --ui",
+    "test:debug-logs": "cross-env DEBUG=* DEBUG_FILE=logs.txt npx playwright test"
+  },
+  "author": "Tanya Petrukha",
+  "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.44.1",
     "@types/node": "^20.14.8",
+    "cross-env": "^7.0.3",
     "prettier": "3.3.2"
   }
 }
