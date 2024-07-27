@@ -71,18 +71,18 @@ test("Contact Us section has navigation", async ({ page }) => {
 });
 
 test("footer year matches current year", async ({ page }) => {
-  // Отримуємо поточний рік
+  // Отримую поточний рік
   const currentYear = new Date().getFullYear();
 
-  // Знаходимо елемент футера, що містить текст з роком
+  // Знаходжу елемент футера, що містить текст з роком
   const footer = await page.getByText(/All Rights Reserved © \d{4}/);
   //\d{4} — регулярний вираз, що відповідає чотирьом цифрам, тобто року у форматі "yyyy".
   // \d представляє цифру, а {4} вказує на те, що потрібно саме чотири цифри.
 
-  // Отримуємо текст з футера
+  // Отримуєю текст з футера
   const footerText = await footer.textContent();
 
-  // Перевіряємо, що текст футера містить поточний рік
+  // Перевіряю, що текст футера містить поточний рік
   expect(footerText).toContain(`© ${currentYear}`);
 });
 
@@ -121,34 +121,50 @@ test("links in Help section", async ({ page }) => {
   );
 });
 
-test("links Contact Us section", async ({ page }) => {
+test("links Contact Us section", async ({ page, context }) => {
   await page.getByRole("link", { name: "Get in touch" }).click();
   await expect(page).toHaveURL(/.*contact/);
-  await page
+
+  // Click on the first link (YouTube)
+  const [newPage1] = await Promise.all([
+    context.waitForEvent('page'),
+    page
       .locator("li")
       .filter({ hasText: "Contact Us Need help with" })
       .locator("div")
       .getByRole("link")
       .first()
-      .click({ timeout: 60000 });;
-    
-  // з девтулзів locator('body > footer > div > ul > li:nth-child(4) > div > a.youtube > svg > path');
-  // чи можна тоді так написати? page.locator('a.youtube').click()
-  await page.waitForURL(/.*youtube/, { timeout: 60000 });;
-  await page
-    .locator("li")
-    .filter({ hasText: "Contact Us Need help with" })
-    .locator("div")
-    .getByRole("link")
-    .nth(1)
-    .click();
-  await page.waitForURL(/.*linkedin/, { timeout: 60000 });
-  await page
-    .locator("li")
-    .filter({ hasText: "Contact Us Need help with" })
-    .locator("div")
-    .getByRole("link")
-    .nth(2)
-    .click();
-  await page.waitForURL(/.*instagram/, { timeout: 60000 });;
+      .click()
+  ]);
+  await newPage1.waitForLoadState();
+  await expect(newPage1).toHaveURL(/.*youtube/);
+  await newPage1.close();
+
+  const [newPage2] = await Promise.all([
+    context.waitForEvent('page'),
+    page
+      .locator("li")
+      .filter({ hasText: "Contact Us Need help with" })
+      .locator("div")
+      .getByRole("link")
+      .nth(1)
+      .click()
+  ]);
+  await newPage2.waitForLoadState();
+  await expect(newPage2).toHaveURL(/.*linkedin/);
+  await newPage2.close();
+
+  const [newPage3] = await Promise.all([
+    context.waitForEvent('page'),
+    page
+      .locator("li")
+      .filter({ hasText: "Contact Us Need help with" })
+      .locator("div")
+      .getByRole("link")
+      .nth(2)
+      .click()
+  ]);
+  await newPage3.waitForLoadState();
+  await expect(newPage3).toHaveURL(/.*instagram/);
+  await newPage3.close();
 });

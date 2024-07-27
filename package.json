@@ -10,7 +10,7 @@
   "author": "Tanya Petrukha",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.44.1",
+    "@playwright/test": "^1.45.3",
     "@types/node": "^20.14.8",
     "cross-env": "^7.0.3",
     "prettier": "3.3.2"

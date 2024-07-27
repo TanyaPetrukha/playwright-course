@@ -16,6 +16,7 @@ test('create an order should display success page with order details', async ({ 
 await page.locator('li').filter({ hasText: 'Gavin the Tiger Gavin the' }).getByRole('link').first().click();
 await page.getByRole('button', { name: 'Add to cart' }).click();
 
+
 //change cart options
 await page.getByLabel('Size').selectOption('Small');
 await page.getByLabel('Color').selectOption('Clay');
