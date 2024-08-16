@@ -4,3 +4,6 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 log*
+/tests/translation_refactoring
+/tests/translation
+/support/translation
