@@ -10,8 +10,10 @@
   "author": "Tanya Petrukha",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.45.3",
+    "@playwright/test": "^1.46.1",
     "@types/node": "^20.14.8",
+    "allure-commandline": "^2.30.0",
+    "allure-playwright": "^2.15.1",
     "cross-env": "^7.0.3",
     "prettier": "3.3.2"
   }
