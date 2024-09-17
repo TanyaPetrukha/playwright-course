@@ -1,9 +1,8 @@
-export default class Cart {
+export class Cart {
     constructor(page) {
         this.page = page;
+        this.titleCartform = page.getByRole("heading", { name: "Cart summary" });
+
     }
-
-    // Locators
-    titleCartform = () => this.page.getByRole("heading", { name: "Cart summary" });
-
 }
+

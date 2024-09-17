@@ -1,46 +1,43 @@
 import { defineConfig, devices } from '@playwright/test';
+import { defineBddConfig } from 'playwright-bdd';
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+// Конфігурація для BDD тестів
+const bddTestDir = defineBddConfig({
+  features: ['./testsBDD/features/*.feature'],
+  steps: ['./testsBDD/steps/*.js'],
+});
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
+// Конфігурація для звичайних Playwright тестів
 export default defineConfig({
-  testDir: './tests',
-  /* Run tests in files in parallel */
+  testDir: './tests', 
   fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 1,
-  /* Opt out of parallel tests on CI. */
+  retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [
-    ['list'], //звичайний консольний репортер
-    [ 'allure-playwright'],
-    // ['json', { outputFile: 'report.json' }] 
-  ],
-  
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  use: {
-    video: 'on', // або ще можна 'retain-on-failure' для збереження відео тільки для невдалих тестів
-    trace: 'on-first-retry',
+  reporter: process.env.CI ? 'blob' : 'html',
 
+  use: {
+    baseURL: process.env.BASE_URL || 'https://ilarionhalushka.github.io',
+    video: 'on', // 'retain-on-failure' для збереження відео тільки для невдалих тестів
+    trace: 'on', //on-first-retry
+    screenshot: {
+      mode: 'on',
+      fullPage: true,
+    },
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
+      name: 'chromium', 
+      testDir: './tests', 
       use: { ...devices['Desktop Chrome'] },
     },
-
+    {
+      name: 'bdd-tests', 
+      testDir: bddTestDir, 
+      use: { ...devices['Desktop Chrome'] },
+    },
     // {
     //   name: 'firefox',
     //   use: { ...devices['Desktop Firefox'] },

@@ -3,18 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "npx playwright test",
-    "test:ui": "npx playwright test --ui",
-    "test:debug-logs": "cross-env DEBUG=* DEBUG_FILE=logs.txt npx playwright test"
+    "test": "npx playwright test --project=chromium",
+    "test:bdd": "npx playwright test --project=bdd-tests"
   },
   "author": "Tanya Petrukha",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.46.1",
+    "@playwright/test": "^1.47.1",
     "@types/node": "^20.14.8",
-    "allure-commandline": "^2.30.0",
-    "allure-playwright": "^2.15.1",
-    "cross-env": "^7.0.3",
-    "prettier": "3.3.2"
+    "playwright-bdd": "^7.4.0"
   }
 }

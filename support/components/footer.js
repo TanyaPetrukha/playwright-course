@@ -1,42 +1,74 @@
-export default class Footer {
-    constructor(page) {
-        this.page = page
-    }
+export class Footer {
+  constructor(page) {
+    this.page = page;
+    this.copyrights = page.locator("p.copyright");
 
-    //Locators
-    copyrights = () => this.page.locator('p.copyright');
+    this.companyInfo = page.locator('li:has-text("Fur Many people have the")');
+    this.generalSection = page.getByRole("heading", { name: "General" });
+    this.helpSection = page.getByRole("heading", { name: "Help" });
+    this.contactUsSection = page.getByRole("heading", { name: "Contact Us" });
 
-    companyInfo = () => this.page.locator('li:has-text("Fur Many people have the")');
-    generalSection = () => this.page.getByRole("heading", { name: "General" });
-    helpSection = () => this.page.getByRole("heading", { name: "Help" });
-    contactUsSection = () => this.page.getByRole("heading", { name: "Contact Us" });
+    this.productsInGeneral = page
+      .getByRole("contentinfo")
+      .getByRole("link", { name: "Products" });
+    this.ourStoryInGeneral = page
+      .getByRole("contentinfo")
+      .getByRole("link", { name: "Our Story" });
+    this.contactInGeneral = page
+      .getByRole("contentinfo")
+      .getByRole("link", { name: "Contact" });
 
-    productsInGeneral = () => this.page.getByRole("contentinfo").getByRole("link", { name: "Products" });
-    ourStoryInGeneral = () => this.page.getByRole("contentinfo").getByRole("link", { name: "Our Story" });
-    contactInGeneral = () => this.page.getByRole("contentinfo").getByRole("link", { name: "Contact" })
+    this.shippingInHelp = page.getByRole("link", { name: "Shipping" });
+    this.returnsInHelp = page.getByRole("link", { name: "Returns" });
 
-    shippingInHelp = () => this.page.getByRole("link", { name: "Shipping" });
-    returnsInHelp = () => this.page.getByRole("link", { name: "Returns" });
+    this.getInTouch = page.getByRole("link", { name: "Get in touch" });
+    this.emailInContact = page.getByRole("link", { name: "fur@example.com" });
+    this.phoneInContact = page.getByRole("link", { name: "+1" });
+    this.youtubeInContact = page.locator("a.youtube");
+    this.linkedinInContact = page.locator("a.linkedin");
+    this.instagramInContact = page.locator("a.instagram");
+  }
 
-    getInTouch = () => this.page.getByRole("link", { name: "Get in touch" });
-    emailInContact = () => this.page.getByRole("link", { name: "fur@example.com" });
-    phoneInContact = () => this.page.getByRole("link", { name: "+1" });
-    youtubeInContact = () => this.page.locator('a.youtube');
-    linkedinInContact = () => this.page.locator('a.linkedin');
-    instagramInContact = () => this.page.locator('a.instagram');
+  //Actions
+  async clickOnProducts() {
+    await this.productsInGeneral.click();
+  }
 
-      //Actions
 
-    clickOnProducts = async () => await this.productsInGeneral().click();
-    clickOnOurStory = async () => await this.ourStoryInGeneral().click();
-    clickOnContact = async () => await this.contactInGeneral().click();
+  async clickOnOurStory() {
+    await this.ourStoryInGeneral.click();
+  }
 
-    clickOnShipping = async () => await this.shippingInHelp().click();
-    clickOnReturns = async () => await this.returnsInHelp().click();
 
-    clickOnGetInTouch = async () => await this.getInTouch().click();
-    clickOnYoutube = async () => await this.youtubeInContact().click();
-    clickOnLinkedin = async () => await this.linkedinInContact().click();
-    clickOnInstagram = async () => await this.instagramInContact().click();
-    
+  async clickOnContact() {
+    await this.contactInGeneral.click();
+  }
+
+  async clickOnShipping() {
+    await this.shippingInHelp.click();
+  }
+
+
+  async clickOnReturns() {
+    await this.returnsInHelp.click();
+  }
+
+
+  async clickOnGetInTouch() {
+    await this.getInTouch.click();
+  }
+
+
+  async clickOnYoutube() {
+    await this.youtubeInContact.click();
+  }
+
+  async clickOnLinkedin() {
+    await this.linkedinInContact.click();
+  }
+
+
+  async clickOnInstagram() {
+    await this.instagramInContact.click();
+  }
 }

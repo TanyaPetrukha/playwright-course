@@ -1,29 +1,28 @@
 import { urls } from "./urls";
 
-export default class ContactPage {
-    constructor(page) {
-        this.page = page;
-    }
+export class ContactPage {
+  constructor(page) {
+    this.page = page;
 
-    //Locators
+    this.titleContactPage = page.getByRole("heading", { name: "Get in touch" });
+    this.map = page.locator("#map");
+    this.contactForm = page.locator("form.contact-form");
 
-    titleContactPage = () => this.page.getByRole("heading", { name: "Get in touch" });
-    map = () => this.page.locator("#map");
-    contactForm = () => this.page.locator('form.contact-form');
+    this.inputName = page.getByPlaceholder("Enter your name...");
+    this.inputEmail = page.getByPlaceholder("Enter your email...");
+    this.inputMessage = page.getByPlaceholder("Enter your message...");
 
-    //    
-    inputName = () => this.page.getByPlaceholder("Enter your name...");
-    inputEmail = () => this.page.getByPlaceholder("Enter your email...");
-    inputMessage = () => this.page.getByPlaceholder("Enter your message...");
+    this.sendMessageButton = page.getByRole("button", { name: "Send Message" });
+  }
 
-    sendMessageButton = () => this.page.getByRole("button", { name: "Send Message" });
 
-    //Actions
-    openContactPage = async () => await this.page.goto(urls.contact);
+  async openContactPage() {
+    await this.page.goto(urls.contact);
+  }
 
-    fillContactForm = async (name, email, message) => {
-        await this.inputName().fill(name);
-        await this.inputEmail().fill(email);
-        await this.inputMessage().fill(message);
-    }
+  async fillContactForm(name, email, message) {
+    await this.inputName.fill(name);
+    await this.inputEmail.fill(email);
+    await this.inputMessage.fill(message);
+  }
 }
