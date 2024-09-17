@@ -1,0 +1,74 @@
+name: Playwright Prod Tests
+
+on:
+  workflow_dispatch:  
+
+jobs:
+  playwright-tests:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2, 3, 4]
+        shardTotal: [4]
+
+    steps:
+    - uses: actions/checkout@v4  
+    - uses: actions/setup-node@v4  
+      with:
+        node-version: 18
+
+    - name: Install dependencies
+      run: npm ci  
+
+    - name: Install Playwright browsers
+      run: npx playwright install --with-deps  
+
+    - name: Set environment URL for prod
+      run: echo "BASE_URL=https://prod.example.com" >> $GITHUB_ENV  
+
+    - name: Run Playwright tests on prod
+      run: npm run test:bdd --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}  
+      env:
+        BASE_URL: ${{ env.BASE_URL }}
+
+    - name: Upload blob report to GitHub Actions Artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: blob-report-${{ matrix.shardIndex }}-prod  
+        path: blob-report
+        retention-days: 1
+
+  merge-reports:
+    if: ${{ !cancelled() }}
+    needs: [playwright-tests]  
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Download blob reports from GitHub Actions Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: all-blob-reports
+        pattern: blob-report-*-prod  
+        merge-multiple: true
+
+    - name: Merge into HTML Report
+      run: npx playwright merge-reports --reporter html ./all-blob-reports
+
+    - name: Upload HTML report
+      uses: actions/upload-artifact@v4
+      with:
+        name: html-report-prod--attempt-${{ github.run_attempt }}  
+        path: playwright-report
+        retention-days: 14
