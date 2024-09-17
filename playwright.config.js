@@ -5,6 +5,7 @@ import { defineBddConfig } from 'playwright-bdd';
 const bddTestDir = defineBddConfig({
   features: ['./testsBDD/features/*.feature'],
   steps: ['./testsBDD/steps/*.js'],
+  
 });
 
 // Конфігурація для звичайних Playwright тестів
