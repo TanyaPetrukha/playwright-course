@@ -1,5 +1,4 @@
 export class ProductsPage {
-  
   constructor(page) {
     this.page = page;
     this.titleProductsPage = page.getByRole("heading", {
@@ -62,19 +61,33 @@ export class ProductsPage {
     this.imgTiger = page.locator("li:nth-child(6) > .styles");
 
     //size and colors of products
-    this.sizeDeer = page.locator("//select[@name='Size']"); //getByLabel('Size');
-    this.colorDeer = page.locator("//select[@name='Color']"); //getByLabel('Color');
+    this.sizeShirt = page.locator("//select[@name='Size']"); //getByLabel('Size');
+    this.colorShirt = page.locator("//select[@name='Color']"); //getByLabel('Color');
 
     //buttons
     this.addToCart = page.locator("//button[normalize-space()='Add to cart']"); //getByRole('button', { name: 'Add to cart' });
     this.checkout = page.locator("//div[@class='snipcart-base-button__label']"); //getByRole('button', { name: 'Checkout' });
   }
 
-
-  async openProductsPage() {
-    await this.page.goto('/jekyll-ecommerce-demo/');
+  getTitle(title) {
+    return this.page.getByRole("link", { name: title });
   }
 
+  getPrice(title) {
+    return this.page
+      .locator("li")
+      .filter({ hasText: title })
+      .getByRole("paragraph")
+      .nth(1);
+  }
+
+  getImage(n) {
+    return this.page.locator(`li:nth-child(${n}) > .styles`);
+  }
+
+  async openProductsPage() {
+    await this.page.goto("/jekyll-ecommerce-demo/");
+  }
 
   async scrollToFooter() {
     await this.page.evaluate(() =>
@@ -82,9 +95,8 @@ export class ProductsPage {
     );
   }
 
-
-  async deerShirtParameters(size, color) {
-    await this.sizeDeer.selectOption({ label: size });
-    await this.colorDeer.selectOption({ label: color });
+  async setShirtParameters(size, color) {
+    await this.sizeShirt.selectOption({ label: size });
+    await this.colorShirt.selectOption({ label: color });
   }
 }
